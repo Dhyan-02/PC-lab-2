@@ -1,0 +1,22 @@
+include <stdio.h>
+#include <mpi.h>
+int main(int argc, char** argv)
+{
+	int rank, data = 0;
+	MPI_Init(&argc, &argv);
+	// Initialize the MPI environment
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+	// Get the rank of the process
+
+	if (rank == 0){
+		data = 100;
+	// Root process sets the data
+		printf("Process %d is broadcasting data = %d\n", rank, data);
+	}
+	MPI_Bcast(&data, 1, MPI_INT, 0, MPI_COMM_WORLD); // Broadcast data from root to all
+	printf("Process %d received data: %d\n", rank, data); // All processes print the data
+
+	MPI_Finalize();
+
+	return 0;
+}
